@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block head %}
+{% endblock %}
+{% block body %}
+    <div>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.first_name.label() }}
+            {{ form.first_name() }}
+        </div>
+        <div>
+            {{ form.last_name.label() }}
+            {{ form.last_name() }}
+        </div>
+        <div>
+            {{ form.username.label() }}
+            {{ form.username() }}
+        </div>
+        <div>
+            {{ form.email.label() }}
+            {{ form.email() }}
+        </div>
+        <div>
+            {{ form.password.label() }}
+            {{ form.password() }}
+        </div>
+        <div>
+            {{ form.confirm_password.label() }}
+            {{ form.confirm_password() }}
+        </div>
+        <div>
+            {{ form.submit.label() }}
+            {{ form.submit() }}
+        </div>
+    </form>
+    </div>
+{% endblock %}
