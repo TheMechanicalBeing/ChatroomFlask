@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="site" uuid="c39b50cb-90cf-4f71-837d-a6cecc9cf505">
+    <data-source source="LOCAL" name="site.db" uuid="ad3a9379-408f-4fcd-ade4-50ac4f881310">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\ttsul\Desktop\Toko\Coding\flaskProject\instance\site.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/instance/site.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.40.1/org/xerial/sqlite-jdbc/3.40.1.0/sqlite-jdbc-3.40.1.0.jar</url>
-        </library>
-      </libraries>
     </data-source>
   </component>
 </project>
