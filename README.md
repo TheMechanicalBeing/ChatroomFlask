@@ -13,3 +13,5 @@ Commit 10: I added number input in register, because I forgot to add an age fiel
 Commit 11: I Improved register route and integrated it to database.
 
 Commit 12: I improved login system, added logging in and logging out
+
+Commit 13: I added login requirements for some pages, because on some pages you need access.
