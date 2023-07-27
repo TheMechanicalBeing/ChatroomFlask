@@ -7,3 +7,7 @@ Commit 7: I made initialization, made project structure, some templates, forms f
 Commit 8: I updated code of registration and login page.
 
 Commit 9: I determined models for database, but database is in .gitignore file (database is not committed) due to data privacy.
+
+Commit 10: I added number input in register, because I forgot to add an age field.
+
+Commit 11: I Improved register route and integrated it to database.
