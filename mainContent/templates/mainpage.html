@@ -2,6 +2,11 @@
 {% block head %}
 {% endblock %}
 {% block body %}
-    <a href="{{ url_for('register') }}">Register</a>
-    <a href="{{ url_for('login') }}">Log in</a>
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}">Log out</a>
+        <p>{{ current_user.username }}</p>
+    {% else %}
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Log in</a>
+    {% endif %}
 {% endblock %}
