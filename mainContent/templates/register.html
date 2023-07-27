@@ -32,6 +32,19 @@
                 {% endif %}
             </div>
             <div>
+                {{ form.age.label() }}
+                {% if form.age.errors %}
+                    {{ form.age }}
+                    <div>
+                        {% for error in form.age.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.age() }}
+                {% endif %}
+            </div>
+            <div>
                 {{ form.username.label() }}
                 {% if form.username.errors %}
                     {{ form.username }}
