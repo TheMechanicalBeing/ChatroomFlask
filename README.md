@@ -17,3 +17,5 @@ Commit 12: I improved login system, added logging in and logging out.
 Commit 13: I added login requirements for some pages, because on some pages you need access.
 
 Commit 14: I added account updates, integrated code on image files by adding profile_pics directy and default.jpg, added another form for updates. also connected base.html to styles.css.
+
+ Commit 15: I started working on rooms, initialized SocketIO, and made room route

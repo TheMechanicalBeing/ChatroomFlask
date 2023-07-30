@@ -6,6 +6,15 @@
         <a href="{{ url_for('account') }}">Account</a>
         <a href="{{ url_for('logout') }}">Log out</a>
         <p>{{ current_user.username }}</p>
+        <form method="post">
+            <button type="submit" name="create">Create a Room</button>
+            <br>
+            <br>
+            <label for="code">
+                <input type="text" name="code" placeholder="enter the room code">
+            </label>
+            <button type="submit" name="join">Join a Room</button>
+        </form>
     {% else %}
         <a href="{{ url_for('register') }}">Register</a>
         <a href="{{ url_for('login') }}">Log in</a>

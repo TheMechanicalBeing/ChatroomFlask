@@ -1,16 +1,37 @@
 from mainContent import app, bcrypt, db
 from flask import render_template, flash, redirect, url_for, request
 from mainContent.forms import RegistrationForm, LoginForm, UpdateAccountForm
-from mainContent.models import User
+from mainContent.models import User, Room, user_room
 from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 import os
 from PIL import Image
 
 
-@app.route('/')
-@app.route('/home')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/home', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        create = request.form.get('create', False)
+        join = request.form.get('join', False)
+        request_code = request.form.get('user_code')
+
+        if create is not False:
+            new_room = Room(code=secrets.token_hex(8))
+            db.session.add(new_room)
+            current_user.rooms.append(new_room)
+            db.session.commit()
+            return redirect(url_for('room', code=new_room.code))
+        elif join is not False:
+            if not db.session.execute(db.Select(Room).filter_by(code=request_code)).first():
+                flash('The given code does not exist.')
+                return redirect(url_for('home'))
+            else:
+                if not user_room.query.filter_by(user_id=current_user.id).first():
+                    current_user.rooms.append(Room.query.filter_by(code=request_code).first()[0])
+                    db.session.commit()
+                return redirect(url_for('room', code=request_code))
+
     return render_template('mainpage.html', title='Home')
 
 
@@ -90,3 +111,10 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+
+@app.route('/room/<string:code>', methods=['GET', 'POST'])
+@login_required
+def room(code):
+    return render_template('room.html', title='Room')
+
