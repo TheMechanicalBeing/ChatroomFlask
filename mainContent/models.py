@@ -11,7 +11,7 @@ def load_user(user_id):
 user_room = db.Table(
     "user_room",
     db.Column('user_id', db.ForeignKey('user.id'), primary_key=True),
-    db.Column('room_id', db.ForeignKey('room.id'), primary_key=True)
+    db.Column('room_id', db.ForeignKey('room.id'), primary_key=True),
 )
 
 
@@ -24,7 +24,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     image_file = db.Column(db.String, nullable=False, default='default.jpg')
-    rooms = db.Relationship('Room', secondary=user_room, backref='user')
+    rooms = db.Relationship('Room', secondary=user_room, backref='user', overlaps="rooms,user")
     messages = db.Relationship('Message', backref='user', lazy=True)
 
     def __repr__(self):
@@ -35,7 +35,7 @@ class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     code = db.Column(db.String, nullable=False, unique=True)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    users = db.Relationship('User', secondary=user_room, backref='room')
+    users = db.Relationship('User', secondary=user_room, backref='room', overlaps="rooms,user")
     messages = db.Relationship('Message', backref='room', lazy=True)
 
     def __repr__(self):

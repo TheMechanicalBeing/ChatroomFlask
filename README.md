@@ -19,3 +19,5 @@ Commit 13: I added login requirements for some pages, because on some pages you 
 Commit 14: I added account updates, integrated code on image files by adding profile_pics directy and default.jpg, added another form for updates. also connected base.html to styles.css.
 
  Commit 15: I started working on rooms, initialized SocketIO, and made room route
+ 
+Commit 16: fixed bugs with joining room, and learning Flask-SocketIO in order to be able to make an application

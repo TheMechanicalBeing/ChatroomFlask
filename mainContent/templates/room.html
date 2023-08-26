@@ -4,4 +4,13 @@
 {% block body %}
     <p>{{ current_user.username }}</p>
     <h1>{{ code }}</h1>
+    <input type="text" rows="3" placeholder="Message" name="message"/>
+    <button type="button" name="send" id="send-btn" onclick="sendMessage()">Send</button>
+    <script type="text/javascript">
+        var socketio = io();
+
+        const sendMessage = () => {
+            console.log("send");
+        }
+    </script>
 {% endblock %}

@@ -1,6 +1,6 @@
-from mainContent import app, db
+from mainContent import app, db, socketio
 from mainContent.models import User, Room, Message
 
 
-with app.app_context():
-    db.create_all()
+if __name__ == "__main__":
+    socketio.run(app, debug=True)
