@@ -1,11 +1,30 @@
 from mainContent import app, bcrypt, db, select_command
-from flask import render_template, flash, redirect, url_for, request, session
+from flask import render_template, flash, redirect, url_for, request, session, g
 from mainContent.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from mainContent.models import User, Room, user_room
-from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import text
 import secrets
 import os
 from PIL import Image
+import functools
+# I have to Make functions to replace flask login
+# Those functions should consist
+# 1. current_user maybe done
+# 2. login_user maybe done
+# 3. logout_user maybe done
+# 4. login_required maybe done
+
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        with app.app_context():
+            if g.user is None:
+                return redirect(url_for("login"))
+
+        return view(**kwargs)
+
+    return wrapped_view
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -19,7 +38,8 @@ def home():
         if create is not False:
             new_room = Room(code=secrets.token_hex(8))
             db.session.add(new_room)
-            current_user.rooms.append(new_room)
+            # Usage of current user
+            g.user.rooms.append(new_room)
             db.session.commit()
             return redirect(url_for('room', code=new_room.code))
 
@@ -33,8 +53,8 @@ def home():
                 return redirect(url_for('home'))
 
             else:
-                if not select_command("user_room", {"user_id": current_user.id}).first():
-                    current_user.rooms.append(Room.query.filter_by(code=request_code).first())
+                if not select_command("user_room", {"user_id": g.user.id}).first():
+                    g.user.rooms.append(Room.query.filter_by(code=request_code).first())
                     db.session.commit()
                 session["current_room_code"] = request_code
                 return redirect(url_for('room', code=request_code))
@@ -44,7 +64,7 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
+    if g.user.is_authenticated:
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -60,13 +80,15 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
+    if g.user:
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
+            # Login User
+            session.clear()
+            session["user_id"] = user.id
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
@@ -77,7 +99,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    logout_user()
+    session.clear()
     return redirect(url_for('home'))
 
 
@@ -102,21 +124,21 @@ def account():
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
-        current_user.first_name = form.first_name.data
-        current_user.last_name = form.last_name.data
-        current_user.age = form.age.data
-        current_user.username = form.username.data
-        current_user.email = form.email.data
+            g.user.image_file = picture_file
+        g.user.first_name = form.first_name.data
+        g.user.last_name = form.last_name.data
+        g.user.age = form.age.data
+        g.user.username = form.username.data
+        g.user.email = form.email.data
         db.session.commit()
         return redirect(url_for('account'))
     elif request.method == 'GET':
-        form.first_name.data = current_user.first_name
-        form.last_name.data = current_user.last_name
-        form.age.data = current_user.age
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+        form.first_name.data = g.user.first_name
+        form.last_name.data = g.user.last_name
+        form.age.data = g.user.age
+        form.username.data = g.user.username
+        form.email.data = g.user.email
+    image_file = url_for('static', filename='profile_pics/' + g.user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 
@@ -125,3 +147,14 @@ def account():
 def room(code):
     return render_template('room.html', title='Room', code=code)
 
+
+@app.before_request
+def load_logged_in_user():
+    user_id = session.get("user_id", None)
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = db.session.execute(
+            text("SELECT * FROM user WHERE id = {}".format(user_id))
+        ).fetchone()

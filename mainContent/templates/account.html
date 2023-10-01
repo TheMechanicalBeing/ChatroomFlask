@@ -2,7 +2,7 @@
 {% block head %}
 {% endblock %}
 {% block body %}
-    <h1>{{ current_user.username }}</h1>
+    <h1>{{ g.user.username }}</h1>
     <img src="{{ image_file }}" alt="Profile img">
     <div>
         <form method="POST" action="" enctype="multipart/form-data">
