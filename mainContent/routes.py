@@ -19,7 +19,8 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         with app.app_context():
-            if g.user is None:
+            load_logged_in_user()
+            if g.get("user", None) is None:
                 return redirect(url_for("login"))
 
         return view(**kwargs)
@@ -64,7 +65,7 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if g.user.is_authenticated:
+    if g.user:
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -89,8 +90,7 @@ def login():
             # Login User
             session.clear()
             session["user_id"] = user.id
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            return redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check email and password if it is written correct.')
 
@@ -145,6 +145,9 @@ def account():
 @app.route('/room/<string:code>', methods=['GET', 'POST'])
 @login_required
 def room(code):
+    if not db.session.execute(text("SELECT code FROM room WHERE code = '{}'".format(code))).first():
+        flash("The given code does not exist or you don't have access to join this room.")
+        return redirect(url_for("home"))
     return render_template('room.html', title='Room', code=code)
 
 
