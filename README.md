@@ -22,4 +22,6 @@ Commit 14: I added account updates, integrated code on image files by adding pro
  
 Commit 16: fixed bugs with joining room, and learning Flask-SocketIO in order to be able to make an application
 
-Commit 17-18: Came back to my code after break (I've been learning front-end, and still learning). I updated Flask libraries and my IDE this made me problems by flask-login wasn't working at all (it had issue with LoginManager). So I decided to fix this problem by replacing all of flask_login code by Flask.g global. My code is refactored and after 3-4 hours of work I still have some bugs to fix for next commit. P.S. Also I deleted all of Socket-IO code because I have to refactor it as well :).
+Commit 17-18: Came back to my code after break (I've been learning front-end, and still learning). I updated Flask libraries and my IDE this made me problems by flask-login wasn't working at all (it had issue with LoginManager). So I decided to fix this problem by replacing all flask_login code by Flask.g global. My code is refactored and after 3-4 hours of work I still have some bugs to fix for next commit. P.S. Also I deleted all of Socket-IO code because I have to refactor it as well :).
+
+Commit 19: Fixed all problems. Also added validation for rooms URL when someone tries to access the room that does not exist in database.
