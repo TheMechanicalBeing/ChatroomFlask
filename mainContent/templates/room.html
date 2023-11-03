@@ -6,7 +6,23 @@
     <h1>{{ code }}</h1>
     <div class="messages" id="messages"></div>
     <div class="inputs">
-        <input type="text" rows="3" placeholder="Message" name="message"/>
-        <button type="button" name="send" id="send-btn">Send</button>
+        <input type="text" placeholder="Message" name="message"/>
+        <button type="button" name="send" id="test">Send</button>
     </div>
+    <script type="text/javascript">
+        console.log("Before io initialization");
+        const socket = io({autoconnect: false});
+        console.log("After io initialization");
+        document.getElementById("test").addEventListener("click", () => {
+            let username = "Dog";
+            console.log("clicked")
+            socket.connect();
+            console.log("Clicked and attempting to connect");
+            socket.on("connect", () => {
+                console.log("Connected");
+                socket.emit("user_join", username);
+            });
+        });
+
+    </script>
 {% endblock %}

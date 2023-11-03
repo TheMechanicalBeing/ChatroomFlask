@@ -1,6 +1,5 @@
 from mainContent import db
 from datetime import datetime
-# Have to do something with mixin
 
 
 user_room = db.Table(

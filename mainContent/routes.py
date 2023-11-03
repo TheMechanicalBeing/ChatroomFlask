@@ -7,12 +7,6 @@ import secrets
 import os
 from PIL import Image
 import functools
-# I have to Make functions to replace flask login
-# Those functions should consist
-# 1. current_user maybe done
-# 2. login_user maybe done
-# 3. logout_user maybe done
-# 4. login_required maybe done
 
 
 def login_required(view):

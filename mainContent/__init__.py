@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from sqlalchemy import text
+from .events import socketio
 
 
 def select_command(table_name, params, select="*"):
@@ -19,6 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 with app.app_context():
     db = SQLAlchemy(app)
     bcrypt = Bcrypt(app)
+    socketio.init_app(app)
 
 
-from mainContent import routes
+from . import routes
